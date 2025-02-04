@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de Confidentialité{% endblock %}
+
+{% block body %}
+    <main id="politique" class="container mt-5">
+        <section class="text-center py-5 bg-dark text-light rounded">
+            <h1 class="fw-bold">Politique de Confidentialité</h1>
+            <p class="lead">Découvrez comment nous protégeons et utilisons vos données personnelles.</p>
+        </section>
+
+        <div class="row mt-4">
+            <aside class="col-md-3 d-none d-md-block sticky-top" style="top: 20px;">
+                <div class="list-group shadow-sm">
+                    <a href="#1" class="list-group-item list-group-item-action">Collecte des données</a>
+                    <a href="#2" class="list-group-item list-group-item-action">Utilisation</a>
+                    <a href="#3" class="list-group-item list-group-item-action">Partage</a>
+                    <a href="#4" class="list-group-item list-group-item-action">Sécurité</a>
+                    <a href="#5" class="list-group-item list-group-item-action">Vos droits</a>
+                    <a href="#6" class="list-group-item list-group-item-action">Modifications</a>
+                    <a href="#7" class="list-group-item list-group-item-action">Contact</a>
+                </div>
+            </aside>
+
+            <section class="col-md-9">
+                {% for section in [
+                    {id: '1', title: 'Collecte des données personnelles', content: 'Nous collectons les données suivantes : inscription, utilisation, projet et paiement.'},
+                    {id: '2', title: 'Utilisation des données personnelles', content: 'Nous utilisons vos données pour améliorer nos services, assurer la sécurité et communiquer avec vous.'},
+                    {id: '3', title: 'Partage des données personnelles', content: 'Vos données peuvent être partagées avec nos prestataires ou les autorités compétentes.'},
+                    {id: '4', title: 'Sécurité des données', content: 'Nous mettons en place des mesures pour protéger vos informations.'},
+                    {id: '5', title: 'Vos droits', content: 'Vous pouvez demander l\'accès, la modification, la suppression ou la limitation de vos données.'},
+                    {id: '6', title: 'Modifications', content: 'Nous pouvons modifier cette politique et informer les utilisateurs des changements.'},
+                    {id: '7', title: 'Contact', content: 'Contactez-nous à : quicktask@gmail.com'}
+                ] %}
+                    <div id="{{ section.id }}" class="mb-4 p-4 bg-dark text-light border rounded shadow-sm fade-in">
+                        <h3 class="fw-bold">{{ section.title }}</h3>
+                        <p>{{ section.content }}</p>
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+    </main>
+
+    <style>
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let sections = document.querySelectorAll(".fade-in");
+            let observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+{% endblock %}

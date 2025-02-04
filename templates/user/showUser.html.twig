@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Détails de l'utilisateur</h1>
+
+        <table class="table table-striped table-bordered">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ user.id }}</td>
+                </tr>
+                <tr>
+                    <th>Photo</th>
+                    <td>
+                        {% if user.photo %}
+                            <img src="{{ 'assets/image/user' }}" alt="Photo de {{ user.firstname }}" class="img-thumbnail" style="max-width: 150px;">
+                        {% else %}
+                            <span class="text-muted">Aucune photo disponible</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th>Roles</th>
+                    <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                </tr>
+                {# <tr>
+                    <th>Mot de passe</th>
+                    <td>{{ user.password }}</td>
+                </tr> #}
+                <tr>
+                    <th>Matricule</th>
+                    <td>{{ user.matricule }}</td>
+                </tr>
+                <tr>
+                    <th>Prénom</th>
+                    <td>{{ user.firstname }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ user.lastname }}</td>
+                </tr>
+                <tr>
+                    <th>Date de naissance</th>
+                    <td>{{ user.birthday ? user.birthday|date('Y-m-d') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone</th>
+                    <td>{{ user.telephone }}</td>
+                </tr>
+                <tr>
+                    <th>Service</th>
+                    <td>{{ user.service }}</td>
+                </tr>
+                <tr>
+                    <th>Spécialité</th>
+                    <td>{{ user.speciality }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning">Editer</a>
+        {{ include('user/deleteUser.html.twig') }}
+    </div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Utilisateur{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Modifier l'utilisateur</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="firstname" class="form-label">Prénom</label>
+                        <input type="text" id="firstname" name="firstname" class="form-control" value="{{ user.firstname }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="lastname" class="form-label">Nom</label>
+                        <input type="text" id="lastname" name="lastname" class="form-control" value="{{ user.lastname }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="telephone" class="form-label">Téléphone</label>
+                        <input type="tel" id="telephone" name="telephone" class="form-control" value="{{ user.telephone }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="birthday" class="form-label">Date de naissance</label>
+                        <input type="date" id="birthday" name="birthday" class="form-control" value="{{ user.birthday ? user.birthday|date('Y-m-d') : '' }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="photo" class="form-label">Photo</label>
+                        <input type="file" id="photo" name="photo" class="form-control">
+                        {% if user.photo %}
+                        <img src="{{ 'assets/image/user' ~ user.photo }}" alt="Photo actuelle" class="img-thumbnail mt-2" style="max-width: 100px;">                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="service" class="form-label">Service</label>
+                        <input type="text" id="service" name="service" class="form-control" value="{{ user.service }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="speciality" class="form-label">Spécialité</label>
+                        <input type="text" id="speciality" name="speciality" class="form-control" value="{{ user.speciality }}">
+                    </div>
+
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-success w-50">Mettre à jour</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+            <div class="mt-4 text-center">
+                <a href="{{ path('app_user_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+    </div>
+{% endblock %}

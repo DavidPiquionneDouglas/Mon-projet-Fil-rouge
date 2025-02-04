@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Projet{% endblock %}
+
+{% block body %}
+
+    {{ include('project/formProject.html.twig', {'button_label': 'Update'}) }}
+
+
+    {{ include('project/deleteProjectform.html.twig') }}
+{% endblock %}

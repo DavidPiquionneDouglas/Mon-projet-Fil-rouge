@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project{% endblock %}
+
+{% block body %}
+    <h1>Projets en cours</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ project.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ project.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ project.code }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ project.description }}</td>
+            </tr>
+            <tr>
+                <th>BeginDate</th>
+                <td>{{ project.beginDate ? project.beginDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndDate</th>
+                <td>{{ project.endDate ? project.endDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EstimateEnddate</th>
+                <td>{{ project.estimateEnddate ? project.estimateEnddate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>IsFinished</th>
+                <td>{{ project.isFinished ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Cost</th>
+                <td>{{ project.cost }}</td>
+            </tr>
+            <tr>
+                <th>IsSuccess</th>
+                <td>{{ project.isSuccess ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+                        <a href="{{ path('app_project_index') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Retour
+                        </a>
+
+                        <a method="post" action="{{ path('app_project_delete', {'id': project.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ project.id) }}">
+                            <button class="btn btn-danger">Supprimer</button>
+                        </a>
+
+
+    {{ include('project/deleteProjectform.html.twig', {'project': project}) }}
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Adresse{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="mb-4 text-center">Modifier Adresse</h1>
+
+            <div class="card shadow p-4 border-0">
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="form-group mb-3">
+                        <label for="street" class="form-label">Rue</label>
+                        <input type="text" id="street" name="street" class="form-control" placeholder="Entrez le nom de la rue" required>
+                        <div class="invalid-feedback">Ce champ est obligatoire.</div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="city" class="form-label">Ville</label>
+                        <input type="text" id="city" name="city" class="form-control" placeholder="Entrez la ville" required>
+                        <div class="invalid-feedback">Ce champ est obligatoire.</div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="zipcode" class="form-label">Code Postal</label>
+                        <input type="text" id="zipcode" name="zipcode" class="form-control" placeholder="Entrez le code postal" required>
+                        <div class="invalid-feedback">Ce champ est obligatoire.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Mettre à jour</button>
+                </form>
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="{{ path('app_adress_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

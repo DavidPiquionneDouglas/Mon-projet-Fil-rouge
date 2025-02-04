@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-uppercase d-flex align-items-center" href="{{ path('app_home') }}">
+            <img src="/assets/image/user/logo.png" alt="Logo" style="height: 40px; margin-right: 10px;">
+            <i class="fas fa-tasks"></i> QuickTask
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- Menu déroulant pour Projets -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-folder-open"></i> Projets
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ path('app_project_index') }}">
+                                <i class="fas fa-folder-open"></i> Mes Projets
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_CHEF_PROJET') %}
+                            <li>
+                                <a class="dropdown-item" href="{{ path('chef_projet_dashboard') }}">
+                                    <i class="fas fa-tasks"></i> Espace Chef de Projet
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_tache_index') }}">
+                        <i class="fas fa-tasks"></i> Tâches
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_adress_index') }}">
+                        <i class="fas fa-map-marker-alt"></i> Adresses
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex gap-2">
+                <a href="{{ path('app_login') }}" class="btn btn-outline-light">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </a>
+                <a href="{{ path('app_user_new') }}" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> S'inscrire
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

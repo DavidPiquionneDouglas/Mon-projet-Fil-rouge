@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adress{% endblock %}
+
+{% block body %}
+    <h1>Détails des adresses</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ adress.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ adress.title }}</td>
+            </tr>
+            <tr>
+                <th>Prénom</th>
+                <td>{{ adress.fname }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ adress.lname }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ adress.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ adress.city }}</td>
+            </tr>
+            <tr>
+                <th>Cp</th>
+                <td>{{ adress.cp }}</td>
+            </tr>
+            <tr>
+                <th>Pays</th>
+                <td>{{ adress.country }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+            <div class="mt-4 text-center">
+                <a href="{{ path('app_adress_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+                        <div class="mt-4 text-center">
+                <a href="{{ path('app_adress_delete', {'id': adress.id}) }}" class="btn btn-secondary">
+                    <i class="bi bi-minus-circle"></i> Effacer
+                </a>
+            </div>
+
+
+{% endblock %}

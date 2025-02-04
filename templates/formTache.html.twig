@@ -1,0 +1,14 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_start(form) }}
+    {{ form_row(form.libelle) }}
+    {{ form_row(form.code) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.beginDate) }}
+    {{ form_row(form.endDate) }}
+    {{ form_row(form.estimateEndDate) }}
+    {{ form_row(form.isFinished) }}
+    {{ form_row(form.isSuccess) }}
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

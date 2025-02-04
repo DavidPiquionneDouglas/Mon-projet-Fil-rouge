@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adresses{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h3 class="mb-4 text-center">Adresses</h3>
+
+    <div class="card shadow border-0 p-4">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">Ville</th>
+                    <th scope="col">Code Postal</th>
+                    <th scope="col">Pays</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for adress in app.user.adresses %}
+                    <tr>
+                        <td>{{ adress.title }}</td>
+                        <td>{{ adress.fname }}</td>
+                        <td>{{ adress.lname }}</td>
+                        <td>{{ adress.adresse }}</td>
+                        <td>{{ adress.city }}</td>
+                        <td>{{ adress.cp }}</td>
+                        <td>{{ adress.country }}</td>
+                        <td class="text-center">
+                            <a href="{{ path('app_adress_show', {'id': adress.id}) }}" class="btn btn-sm btn-info">
+                                <i class="bi bi-eye"></i> Voir
+                            </a>
+                            <a href="{{ path('app_adress_edit', {'id': adress.id}) }}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil-square"></i> Modifier
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">Aucun enregistrement trouvé</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_adress_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Créer une Nouvelle Adresse
+        </a>
+    </div>
+</div>
+{% endblock %}

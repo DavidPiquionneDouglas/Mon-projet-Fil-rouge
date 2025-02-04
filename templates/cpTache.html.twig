@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau des tâches{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h3 class="mb-4 text-center">Tableau des tâches</h3>
+
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center">
+                <p class="fw-bold">Tâches: En cours</p>
+                <hr>
+                <h2 class="text-primary">13</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center">
+                <p class="fw-bold">Tâches: En retard</p>
+                <hr>
+                <h2 class="text-danger">4</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center">
+                <p class="fw-bold">Tâches: Terminées</p>
+                <hr>
+                <h2 class="text-success">6</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center">
+                <p class="fw-bold">Tâches: Total</p>
+                <hr>
+                <h2 class="text-secondary">23</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow border-0 p-4 mt-4 text-center">
+        <h3 class="mb-3">Tâches Récentes</h3>
+        {% if taches is not empty %}
+            {% for tache in taches %}
+            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                <div>
+                    <span class="badge bg-primary me-2"></span>{{ tache.libelle }}
+                </div>
+                <div>
+                    <span class="text-muted me-2"><i class="bi bi-watch"></i> 
+                        {{ tache.beginDate ? tache.beginDate|date('d/m/Y H:i') : 'Non définie' }}
+                    </span>
+                    <button class="btn btn-light btn-sm"><i class="bi bi-three-dots"></i></button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center text-muted">Aucune tâche récente</p>
+        {% endif %}
+    </div>
+
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_tache_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Créer une nouvelle tâche
+        </a>
+    </div>
+</div>
+{% endblock %}

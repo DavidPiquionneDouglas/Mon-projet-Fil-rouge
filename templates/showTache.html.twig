@@ -1,0 +1,10 @@
+<h1>Détails de la tâche</h1>
+
+<p>Libellé : {{ tache.libelle }}</p>
+<p>Description : {{ tache.description }}</p>
+<p>Date de début : {{ tache.beginDate|date('d/m/Y H:i') }}</p>
+<p>Date de fin : {{ tache.endDate|date('d/m/Y H:i') }}</p>
+<p>Date estimée de fin : {{ tache.estimateEndDate ? tache.estimateEndDate|date('d/m/Y H:i') : 'Non définie' }}</p>
+<p>Statut : {{ tache.isFinished ? 'Terminé' : 'Non terminé' }}</p>
+
+

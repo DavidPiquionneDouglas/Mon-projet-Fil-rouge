@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une Nouvelle Adresse{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h3 class="mb-4 text-center">Créer une Nouvelle Adresse</h3>
+
+            <div class="card shadow p-4 border-0">
+                {{ form_start(form) }}
+                    <div class="mb-3">
+                        {{ form_label(form.title, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.title, {'attr': {'class': 'form-control', 'placeholder': '#'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.fname, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.fname, {'attr': {'class': 'form-control', 'placeholder': 'Votre prénom'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.lname, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.lname, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.adresse, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.adresse, {'attr': {'class': 'form-control', 'placeholder': 'Saisissez numéro de rue et nom de rue'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.city, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': 'Votre ville'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.cp, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.cp, {'attr': {'class': 'form-control', 'placeholder': 'Votre code postal'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.country, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.country, {'attr': {'class': 'form-control', 'placeholder': 'Votre pays'}}) }}
+                    </div>
+
+                    <div class="text-center">
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success btn-block'}}) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="{{ path('app_adress_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

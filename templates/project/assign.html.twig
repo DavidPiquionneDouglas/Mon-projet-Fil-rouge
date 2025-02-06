@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Assigner un utilisateur{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Assigner un utilisateur au projet "{{ project.libelle }}"</h1>
+
+    {{ form_start(form) }}
+        <div class="mb-3">
+            {{ form_label(form.assignedUser, "Sélectionner un utilisateur") }}
+            {{ form_widget(form.assignedUser, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Assigner</button>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

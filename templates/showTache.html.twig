@@ -1,10 +1,41 @@
-<h1>Détails de la tâche</h1>
+{% extends 'base.html.twig' %}
 
-<p>Libellé : {{ tache.libelle }}</p>
-<p>Description : {{ tache.description }}</p>
-<p>Date de début : {{ tache.beginDate|date('d/m/Y H:i') }}</p>
-<p>Date de fin : {{ tache.endDate|date('d/m/Y H:i') }}</p>
-<p>Date estimée de fin : {{ tache.estimateEndDate ? tache.estimateEndDate|date('d/m/Y H:i') : 'Non définie' }}</p>
-<p>Statut : {{ tache.isFinished ? 'Terminé' : 'Non terminé' }}</p>
+{% block title %}Détails de la tâche{% endblock %}
 
+{% block body %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white text-center">
+            <h3 class="mb-0">Détails de la tâche</h3>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Libellé :</strong> {{ tache.libelle }}</li>
+                <li class="list-group-item"><strong>Description :</strong> {{ tache.description }}</li>
+                <li class="list-group-item"><strong>Date de début :</strong> {{ tache.beginDate|date('d/m/Y H:i') }}</li>
+                <li class="list-group-item"><strong>Date de fin :</strong> {{ tache.endDate|date('d/m/Y H:i') }}</li>
+                <li class="list-group-item"><strong>Date estimée de fin :</strong> 
+                    {{ tache.estimateEndDate ? tache.estimateEndDate|date('d/m/Y H:i') : 'Non définie' }}
+                </li>
+                <li class="list-group-item"><strong>Statut :</strong> 
+                    <span class="badge {% if tache.isFinished %} bg-success {% else %} bg-warning text-dark {% endif %}">
+                        {{ tache.isFinished ? 'Terminé' : 'Non terminé' }}
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer text-center">
+            <a href="{{ path('app_tache_index') }}" class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+            <a href="{{ path('app_tache_edit', {id: tache.id}) }}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Modifier la tâche
+            </a>
+        </div>
+    </div>
+</div>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% endblock %}

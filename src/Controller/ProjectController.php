@@ -4,12 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Form\ProjectType;
+use App\Form\AssignProjectType;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/project')]
 final class ProjectController extends AbstractController
@@ -17,8 +18,18 @@ final class ProjectController extends AbstractController
     #[Route(name: 'app_project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository): Response
     {
+        $project = $projectRepository->findAll();
+        
+        $stats = [
+            'en_cours' => $projectRepository->count(['statut' => 'En cours']),
+            'en_retard' => $projectRepository->count(['statut' => 'En retard']),
+            'terminee' => $projectRepository->count(['statut' => 'Terminée']),
+            'total' => $projectRepository->count([]),
+        ];
+
         return $this->render('project/indexProject.html.twig', [
-            'projects' => $projectRepository->findAll(),
+            'project' => $project,
+            'stats' => $stats,
         ]);
     }
 
@@ -77,5 +88,23 @@ final class ProjectController extends AbstractController
         }
 
         return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/assign', name: 'app_project_assign', methods: ['GET', 'POST'])]
+    public function assign(Project $project, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(AssignProjectType::class, $project);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash('success', 'Utilisateur assigné avec succès !');
+            return $this->redirectToRoute('chef_projet_dashboard');
+        }
+
+        return $this->render('project/assign.html.twig', [
+            'form' => $form->createView(),
+            'project' => $project,
+        ]);
     }
 }

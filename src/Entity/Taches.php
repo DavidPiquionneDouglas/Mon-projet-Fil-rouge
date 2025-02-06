@@ -4,10 +4,11 @@ namespace App\Entity;
 
 use App\Repository\TachesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
-#[ORM\Entity(repositoryClass: TachesRepository::class)]
-class Taches
-{
+    #[ORM\Entity(repositoryClass: TachesRepository::class)]
+    class Taches
+    {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
@@ -43,6 +44,26 @@ class Taches
 
     #[ORM\Column(type: "boolean")]
     private bool $isSuccess = false;
+
+    #[ORM\Column(type: 'string', length: 50)]
+    private ?string $statut = 'En cours';
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'taches')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $assignedUser = null;
+
+    
+
+    public function getAssignedUser(): ?User
+    {
+        return $this->assignedUser;
+    }
+
+    public function setAssignedUser(?User $assignedUser): self
+    {
+        $this->assignedUser = $assignedUser;
+        return $this;
+    }
 
     // Getters et setters...
     public function getId(): ?int
@@ -157,6 +178,17 @@ class Taches
     public function setIsSuccess(bool $isSuccess): self
     {
         $this->isSuccess = $isSuccess;
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
         return $this;
     }
 }

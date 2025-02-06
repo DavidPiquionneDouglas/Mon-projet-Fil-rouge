@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -45,6 +46,21 @@ class Project
 
     #[ORM\Column(type: 'string', length: 50)]
     private ?string $statut = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projects')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $assignedUser = null;
+
+    public function getAssignedUser(): ?User
+    {
+        return $this->assignedUser;
+    }
+
+    public function setAssignedUser(?User $user): self
+    {
+        $this->assignedUser = $user;
+        return $this;
+    }
 
     /**
      * @var Collection<int, User>

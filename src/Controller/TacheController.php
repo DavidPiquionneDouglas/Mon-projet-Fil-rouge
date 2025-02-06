@@ -14,14 +14,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class TacheController extends AbstractController
 {
     #[Route('/', name: 'app_tache_index', methods: ['GET'])]
-public function index(TachesRepository $tachesRepository): Response
-{
-    $taches = $tachesRepository->findAll();
+    public function index(TachesRepository $tachesRepository): Response
+    {
+        $taches = $tachesRepository->findAll();
+        
+        $stats = [
+            'en_cours' => count(array_filter($taches, fn($t) => $t->getStatut() === 'En cours')),
+            'en_retard' => count(array_filter($taches, fn($t) => $t->getStatut() === 'En retard')),
+            'terminee' => count(array_filter($taches, fn($t) => $t->getStatut() === 'Terminée')),
+            'total' => count($taches)
+        ];
 
-    return $this->render('cpTache.html.twig', [
-        'taches' => $taches,  
-    ]);
-}
+        return $this->render('cpTache.html.twig', [
+            'taches' => $taches,
+            'stats' => $stats,
+        ]);
+    }
 
     #[Route('/new', name: 'app_tache_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -31,26 +39,14 @@ public function index(TachesRepository $tachesRepository): Response
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Formater les dates avant d'enregistrer
-
             $entityManager->persist($tache);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_tache_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_tache_index');
         }
 
         return $this->render('newTache.html.twig', [
-            'tache' => $tache,
             'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_tache_show', methods: ['GET'])]
-    public function show(Taches $tache): Response
-    {
-        return $this->render('showTache.html.twig', [
-            'tache' => $tache,
         ]);
     }
 
@@ -62,20 +58,30 @@ public function index(TachesRepository $tachesRepository): Response
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_tache_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_tache_index');
         }
 
-        return $this->render('tache/edit.html.twig', [
+        return $this->render('showTache.html.twig', [
             'tache' => $tache,
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/{id}', name: 'app_tache_delete', methods: ['POST'])]
+    #[Route('/{id}/update-status', name: 'app_tache_update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, Taches $tache, EntityManagerInterface $entityManager): Response
+    {
+        $status = $request->request->get('statut');
+        if (in_array($status, ['En cours', 'En retard', 'Terminée'])) {
+            $tache->setStatut($status);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('app_tache_index');
+    }
+
+    #[Route('/{id}/delete', name: 'app_tache_delete', methods: ['POST'])]
     public function delete(Request $request, Taches $tache, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tache->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $tache->getId(), $request->request->get('_token'))) {
             $entityManager->remove($tache);
             $entityManager->flush();
         }

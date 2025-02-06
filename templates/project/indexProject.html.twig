@@ -4,14 +4,35 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h3 class="mb-4 text-center">Projets</h3>
+    <h3 class="mb-4 text-center">Tableau des projets</h3>
 
     <div class="row g-4">
         <div class="col-md-3">
             <div class="card shadow border-0 p-3 text-center">
-                <p class="fw-bold">Projets en cours</p>
+                <p class="fw-bold">Projets: En cours</p>
                 <hr>
-                <h2 class="text-primary">{{ projects|length }}</h2>
+                <h2 class="text-primary">{{ stats.en_cours }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center">
+                <p class="fw-bold">Projets: En retard</p>
+                <hr>
+                <h2 class="text-danger">{{ stats.en_retard }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center">
+                <p class="fw-bold">Projets: Terminées</p>
+                <hr>
+                <h2 class="text-success">{{ stats.terminee }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow border-0 p-3 text-center">
+                <p class="fw-bold">Projets: Total</p>
+                <hr>
+                <h2 class="text-secondary">{{ stats.total }}</h2>
             </div>
         </div>
     </div>
@@ -34,7 +55,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for project in projects %}
+                {% for project in project %}
                 <tr>
                     <td>{{ project.id }}</td>
                     <td>{{ project.libelle }}</td>
@@ -44,11 +65,14 @@
                     <td>{{ project.endDate ? project.endDate|date('d-m-Y') : '-' }}</td>
                     <td>{{ project.estimateEnddate ? project.estimateEnddate|date('d-m-Y') : '-' }}</td>
                     <td>
-                        <span class="badge {{ project.isFinished ? 'bg-success' : 'bg-warning' }}">
-                            {{ project.isFinished ? 'Terminé' : 'En cours' }}
+                        <span class="badge 
+                            {% if project.statut == 'Terminée' %}bg-success
+                            {% elseif project.statut == 'En retard' %}bg-danger
+                            {% else %}bg-warning{% endif %}">
+                            {{ project.statut }}
                         </span>
                     </td>
-                    <td>{{ project.cost }} €</td>
+                    <td>{{ project.cost|number_format(2, ',', ' ') }} €</td>
                     <td>
                         <span class="badge {{ project.isSuccess ? 'bg-success' : 'bg-danger' }}">
                             {{ project.isSuccess ? 'Oui' : 'Non' }}
@@ -65,7 +89,7 @@
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="11" class="text-muted text-center">Pas de projet en cours</td>
+                    <td colspan="11" class="text-muted text-center">Aucun projet trouvé.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -78,5 +102,4 @@
         </a>
     </div>
 </div>
-
 {% endblock %}

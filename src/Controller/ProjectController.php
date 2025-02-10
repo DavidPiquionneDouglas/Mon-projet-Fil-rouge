@@ -15,10 +15,18 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/project')]
 final class ProjectController extends AbstractController
 {
-    #[Route(name: 'app_project_index', methods: ['GET'])]
+    #[Route('/', name: 'app_project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository): Response
     {
-        $project = $projectRepository->findAll();
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $projects = $projectRepository->findAll();
+        } else {
+            $projects = $projectRepository->createQueryBuilder('p')
+                ->where('p.assignedUser = :user')
+                ->setParameter('user', $this->getUser())
+                ->getQuery()
+                ->getResult();
+        }
         
         $stats = [
             'en_cours' => $projectRepository->count(['statut' => 'En cours']),
@@ -26,13 +34,13 @@ final class ProjectController extends AbstractController
             'terminee' => $projectRepository->count(['statut' => 'Terminée']),
             'total' => $projectRepository->count([]),
         ];
-
+        
         return $this->render('project/indexProject.html.twig', [
-            'project' => $project,
+            'projects' => $projects,
             'stats' => $stats,
         ]);
     }
-
+    
     #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

@@ -24,27 +24,27 @@
                 <td>{{ project.description }}</td>
             </tr>
             <tr>
-                <th>BeginDate</th>
+                <th>Date de début</th>
                 <td>{{ project.beginDate ? project.beginDate|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>EndDate</th>
+                <th>Date de fin</th>
                 <td>{{ project.endDate ? project.endDate|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>EstimateEnddate</th>
+                <th>Estimation de fin</th>
                 <td>{{ project.estimateEnddate ? project.estimateEnddate|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>IsFinished</th>
+                <th>Terminé</th>
                 <td>{{ project.isFinished ? 'Yes' : 'No' }}</td>
             </tr>
             <tr>
-                <th>Cost</th>
+                <th>Coût</th>
                 <td>{{ project.cost }}</td>
             </tr>
             <tr>
-                <th>IsSuccess</th>
+                <th>Réussi</th>
                 <td>{{ project.isSuccess ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>

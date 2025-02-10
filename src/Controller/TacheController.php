@@ -16,7 +16,15 @@ class TacheController extends AbstractController
     #[Route('/', name: 'app_tache_index', methods: ['GET'])]
     public function index(TachesRepository $tachesRepository): Response
     {
-        $taches = $tachesRepository->findAll();
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $taches = $tachesRepository->findAll();
+        } else {
+            $taches = $tachesRepository->createQueryBuilder('t')
+                ->where('t.assignedUser = :user')
+                ->setParameter('user', $this->getUser())
+                ->getQuery()
+                ->getResult();
+        }
         
         $stats = [
             'en_cours' => count(array_filter($taches, fn($t) => $t->getStatut() === 'En cours')),
@@ -24,13 +32,13 @@ class TacheController extends AbstractController
             'terminee' => count(array_filter($taches, fn($t) => $t->getStatut() === 'Terminée')),
             'total' => count($taches)
         ];
-
+    
         return $this->render('cpTache.html.twig', [
             'taches' => $taches,
             'stats' => $stats,
         ]);
     }
-
+    
     #[Route('/new', name: 'app_tache_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

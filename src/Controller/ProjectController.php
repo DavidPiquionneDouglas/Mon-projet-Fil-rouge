@@ -78,7 +78,7 @@ final class ProjectController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('chef_projet_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('project/editProject.html.twig', [

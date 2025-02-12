@@ -19,37 +19,44 @@ final class UserController extends AbstractController
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
-        // Rediriger l'utilisateur vers son propre profil
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+    
         return $this->redirectToRoute('app_user_show', ['id' => $this->getUser()->getId()]);
     }
-
+    
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $uphi): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hasher le mot de passe
             $user = $form->getData();
-            $mdp = $user->getPassword();
-            $mdp = $uphi->hashPassword($user, $mdp);
-            $user->setPassword($mdp);
+            
+            // Hash du mot de passe
+            $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
 
-            // Récupérer la photo et définir le chemin
-            $chemin = $this->getParameter('kernel.project_dir') . '/public/assets/image/user'; // Chemin absolu
-            $fichier = $form['photo']->getData();
-            if ($fichier) {
-                $nouveauNomFichier = md5(uniqid()) . '.' . $fichier->guessExtension(); // Nom unique
-                $fichier->move($chemin, $nouveauNomFichier);
-                $user->setPhoto('/assets/image/user/' . $nouveauNomFichier); // Chemin relatif pour l'affichage
+            // Upload de la photo
+            $photo = $form->get('photo')->getData();
+            if ($photo) {
+                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/assets/image/user';
+                $fileName = md5(uniqid()) . '.' . $photo->getClientOriginalExtension();
+
+                try {
+                    $photo->move($uploadsDir, $fileName);
+                    $user->setPhoto('/assets/image/user/' . $fileName);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Erreur lors du téléchargement de la photo.');
+                }
             }
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_index');
         }
 
         return $this->render('user/newUser.html.twig', [
@@ -61,20 +68,26 @@ final class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
-        // Vérifier si l'utilisateur connecté essaie d'accéder à son propre profil
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+    
         if ($this->getUser()->getId() !== $user->getId()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à accéder à ce profil.");
         }
-
+    
         return $this->render('user/showUser.html.twig', [
             'user' => $user,
         ]);
     }
-
+    
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $uphi): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        // Vérifier si l'utilisateur connecté essaie de modifier son propre profil
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
         if ($this->getUser()->getId() !== $user->getId()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à modifier ce profil.");
         }
@@ -83,25 +96,39 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hasher le mot de passe (seulement si le mot de passe a été modifié)
-            if ($form->has('password') && $form->get('password')->getData()) {
-                $mdp = $form->get('password')->getData();
-                $mdp = $uphi->hashPassword($user, $mdp);
-                $user->setPassword($mdp);
+            // Vérification du CSRF token
+            if (!$this->isCsrfTokenValid('edit_user' . $user->getId(), $request->request->get('_token'))) {
+                throw new AccessDeniedException("Token CSRF invalide.");
             }
 
-            // Récupérer la photo et définir le chemin (seulement si une nouvelle photo a été téléchargée)
-            if ($form->has('photo') && $form->get('photo')->getData()) {
-                $chemin = $this->getParameter('kernel.project_dir') . '/public/assets/image/user';
-                $fichier = $form['photo']->getData();
-                $nouveauNomFichier = md5(uniqid()) . '.' . $fichier->guessExtension();
-                $fichier->move($chemin, $nouveauNomFichier);
-                $user->setPhoto('/assets/image/user/' . $nouveauNomFichier);
+            // Mise à jour du mot de passe si changé
+            if (!empty($form->get('password')->getData())) {
+                $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
             }
+
+            // Gestion de l'upload de la photo
+            $photo = $form->get('photo')->getData();
+            if ($photo) {
+                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/assets/image/user';
+                $fileName = md5(uniqid()) . '.' . $photo->getClientOriginalExtension();
+
+                try {
+                    $photo->move($uploadsDir, $fileName);
+                    $user->setPhoto('/assets/image/user/' . $fileName);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Erreur lors du téléchargement de la photo.');
+                }
+            }
+
+            // Gestion des champs optionnels
+            $user->setFirstName($user->getFirstName() ?: '');
+            $user->setMatricule($user->getMatricule() ?: '');
+            $user->setBirthday($user->getBirthday() ?: null);
 
             $entityManager->flush();
+            $this->addFlash('success', 'Votre profil a bien été mis à jour !');
 
-            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render('user/editUser.html.twig', [
@@ -109,11 +136,14 @@ final class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
+    
     #[Route('/{id}/delete', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        // Vérifier si l'utilisateur connecté essaie de supprimer son propre profil
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
         if ($this->getUser()->getId() !== $user->getId()) {
             throw new AccessDeniedException("Vous n'êtes pas autorisé à supprimer ce profil.");
         }
@@ -123,6 +153,6 @@ final class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home');
     }
 }

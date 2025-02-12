@@ -42,9 +42,6 @@ use Mailjet\Resources;
                         //  'TemplateID' => 6703135,
                         //  'TemplateLanguage' => true,
                         'Subject' => $subject,
-                         'Variables' => [
-                             "content" => $content
-                         ],
                         // "My first Mailjet Email!",
                         // 'TextPart' => "Greetings from Mailjet!",
                          'HTMLPart' => $content

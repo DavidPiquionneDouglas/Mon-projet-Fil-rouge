@@ -35,10 +35,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $matricule = null;
+    private ?string $matricule = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $firstname = null;
+    private ?string $firstname = '';
 
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
@@ -79,6 +79,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'LeaderProject', targetEntity: Taches::class)]
     private Collection $leadProjectTaches;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $tokenExpiredAt = null;
+
     public function __toString(): string
     {
         return $this->email . ' ' . $this->lastname;  
@@ -105,7 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
@@ -162,7 +168,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 
@@ -183,7 +189,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->matricule;
     }
 
-    public function setMatricule(string $matricule): static
+    public function setMatricule(?string $matricule): self
     {
         $this->matricule = $matricule;
 
@@ -195,7 +201,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname): static
+    public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -207,7 +213,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname): static
+    public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
 
@@ -219,7 +225,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->birthday;
     }
 
-    public function setBirthday(\DateTimeInterface $birthday): static
+    public function setBirthday(?\DateTimeInterface $birthday): self
     {
         $this->birthday = $birthday;
 
@@ -231,7 +237,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->telephone;
     }
 
-    public function setTelephone(string $telephone): static
+    public function setTelephone(?string $telephone): static
     {
         $this->telephone = $telephone;
 
@@ -243,7 +249,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->service;
     }
 
-    public function setService(string $service): static
+    public function setService(?string $service): static
     {
         $this->service = $service;
 
@@ -255,7 +261,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->speciality;
     }
 
-    public function setSpeciality(string $speciality): static
+    public function setSpeciality(?string $speciality): static
     {
         $this->speciality = $speciality;
 
@@ -387,6 +393,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $tache->setLeaderProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function getTokenExpiredAt(): ?\DateTimeInterface
+    {
+        return $this->tokenExpiredAt;
+    }
+
+    public function setTokenExpiredAt(?\DateTimeInterface $tokenExpiredAt): static
+    {
+        $this->tokenExpiredAt = $tokenExpiredAt;
 
         return $this;
     }

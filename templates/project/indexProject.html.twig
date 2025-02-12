@@ -66,8 +66,7 @@
                             <td>{{ project.code }}</td>
                             <td>{{ project.description }}</td>
                             <td>
-                                <form method="post" action="{{ path('app_project_show', {'id': project.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ project.id) }}">
+                                <form method="get" action="{{ path('app_project_show', {'id': project.id}) }}" style="display:inline;">
                                     <button class="btn btn-sm btn-warning" type="submit">Editer</button>
                                 </form>
                             </td>

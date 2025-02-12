@@ -1,97 +1,101 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tableau des tâches{% endblock %}
+{% block title %}Espace Chef de Projet - Tâches{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h3 class="mb-4 text-center">Tableau des tâches</h3>
+    <div class="container mt-4">
+        <h3 class="text-center">Tableau de Bord - Tâches</h3>
 
-    <div class="row g-4">
-        <div class="col-md-3">
-            <div class="card shadow border-0 p-3 text-center">
-                <p class="fw-bold">Tâches: En cours</p>
-                <hr>
-                <h2 class="text-primary">{{ stats.en_cours }}</h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow border-0 p-3 text-center">
-                <p class="fw-bold">Tâches: En retards</p>
-                <hr>
-                <h2 class="text-danger">{{ stats.en_retard }}</h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow border-0 p-3 text-center">
-                <p class="fw-bold">Tâches: Terminées</p>
-                <hr>
-                <h2 class="text-success">{{ stats.terminee }}</h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow border-0 p-3 text-center">
-                <p class="fw-bold">Tâches: Total</p>
-                <hr>
-                <h2 class="text-secondary">{{ stats.total }}</h2>
-            </div>
-        </div>
-    </div>
-
-    <div class="card shadow border-0 p-4 mt-4">
-        <h3 class="mb-3 text-center">Tâches Récentes</h3>
-        {% if taches is not empty %}
-            {% for tache in taches %}
-            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                <div>
-                    <span class="badge {% if tache.statut == 'En cours' %}bg-primary{% elseif tache.statut == 'En retard' %}bg-danger{% elseif tache.statut == 'Terminée' %}bg-success{% else %}bg-secondary{% endif %} me-2">
-                        {{ tache.statut }}
-                    </span>
-                    {{ tache.libelle }}
-                </div>
-                <div>
-                    <span class="text-muted me-2"><i class="bi bi-person"></i>
-                        {% if tache.assignedUser %}
-                            {{ tache.assignedUser.email }}
-                        {% else %}
-                            <span class="text-danger">Non assignée</span>
-                        {% endif %}
-                    </span>
-                    <span class="text-muted me-2"><i class="bi bi-watch"></i> 
-                        {{ tache.beginDate ? tache.beginDate|date('d/m/Y H:i') : 'Non définie' }}
-                    </span>
-
-                    <form method="post" action="{{ path('app_tache_update_status', {'id': tache.id}) }}" class="d-inline">
-                        <select name="statut" class="form-select d-inline w-auto" onchange="this.form.submit()">
-                            <option value="En cours" {% if tache.statut == 'En cours' %}selected{% endif %}>En cours</option>
-                            <option value="En retard" {% if tache.statut == 'En retard' %}selected{% endif %}>En retard</option>
-                            <option value="Terminée" {% if tache.statut == 'Terminée' %}selected{% endif %}>Terminée</option>
-                        </select>
-                        <input type="hidden" name="_token" value="{{ csrf_token('update_status' ~ tache.id) }}">
-                    </form>
-
-                    <div class="dropdown d-inline">
-                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-three-dots"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ path('app_tache_edit', {'id': tache.id}) }}">Modifier</a></li>
-                            <li>
-                                <form method="post" action="{{ path('app_tache_delete', {'id': tache.id}) }}" onsubmit="return confirm('Confirmer la suppression ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tache.id) }}">
-                                    <button class="dropdown-item text-danger" type="submit">Supprimer</button>
-                                </form>
-                            </li>
-                        </ul>
+        <div class="row my-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h5 class="card-title">Tâches en cours</h5>
+                        <p class="display-6">{{ taches_en_cours|length }}</p>
                     </div>
                 </div>
             </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-center text-muted">Aucune tâche récente</p>
-        {% endif %}
-    </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <h5 class="card-title">Tâches en retard</h5>
+                        <p class="display-6">{{ taches_en_retard|length }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">Tâches terminées</h5>
+                        <p class="display-6">{{ taches_termines|length }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Tâches</h5>
+                        <p class="display-6">{{ taches|length }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <h2>Tâches Récentes</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Statut</th>
+                    <th>Utilisateur assigné</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tache in taches %}
+                    <tr>
+                        <td>{{ tache.libelle }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if tache.statut == 'En cours' %}bg-success
+                                {% elseif tache.statut == 'En retard' %}bg-warning
+                                {% elseif tache.statut == 'Terminée' %}bg-primary
+                                {% else %}bg-secondary{% endif %}">
+                                {{ tache.statut }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if tache.assignedUser %}
+                                {{ tache.assignedUser.email }}
+                            {% else %}
+                                <span class="text-muted">Non assigné</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('app_tache_edit', {'id': tache.id}) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i> Editer
+                            </a>
+                            {% if is_granted('ROLE_CHEF_PROJET') or is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('app_tache_assign', {'id': tache.id}) }}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-user-plus"></i> Assigner
+                                </a>
+                            {% endif %}
+                            {% if is_granted('ROLE_CHEF_PROJET') or is_granted('ROLE_ADMIN') %}
+                                <form method="post" action="{{ path('app_tache_delete', {'id': tache.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tache.id) }}">
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Supprimer
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Aucune tâche trouvée.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-</div>
-
 {% endblock %}

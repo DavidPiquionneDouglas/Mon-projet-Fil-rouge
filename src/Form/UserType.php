@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -13,32 +14,39 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CsrfTokenType;
 
 class UserType extends AbstractType
 {
+    
+    
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('matricule', TextType::class, [
-                'label' => 'Matricule',
-                'attr' => [
-                    'placeholder' => 'Votre matricule de référence'
-                ]
-            ])
-            ->add('firstName', TextType::class, [
+
+                ->add('matricule', TextType::class, [
+                    'required' => false, 
+                    'empty_data' => '', 
+                ])
+                ->add('firstName', TextType::class, [
+                'required' => false,
+                'empty_data' =>'',
                 'label' => 'Prénom',
                 'attr' => [
-                    'placeholder' => 'Votre prénom'
+                'placeholder' => 'Votre prénom'
                 ]
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom',
                 'attr' => [
-                    'placeholder' => 'Votre nom'
+                'placeholder' => 'Votre nom'
                 ]
             ])
             ->add('birthday', DateType::class, [
-                // 'widget' => 'single_text',
+                'widget' => 'single_text',
+                'required' => false,
+                'empty_data' => null,
                 'label' => 'Date de naissance'
                 ])
                 ->add('telephone', TelType::class, [
@@ -96,6 +104,9 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'csrf_protection' => true, // Activation du token CSRF
+            'csrf_field_name' => '_token', // Nom du champ
+            'csrf_token_id' => 'user_form',
         ]);
     }
 }

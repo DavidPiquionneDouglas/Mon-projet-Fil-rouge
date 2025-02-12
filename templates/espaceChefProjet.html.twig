@@ -58,10 +58,10 @@
             <td>{{ project.libelle }}</td>
             <td>
                 <span class="badge 
-                    {% if project.statut == 'en cours' %}bg-success
-                    {% elseif project.statut == 'en retard' %}bg-warning
-                    {% elseif project.statut == 'terminé' %}bg-primary
-                    {% endif %}">
+                    {% if project.statut == 'En cours' %}bg-success
+                    {% elseif project.statut == 'En retard' %}bg-warning
+                    {% elseif project.statut == 'Terminé' %}bg-primary
+                    {% else %}bg-secondary{% endif %}">
                     {{ project.statut }}
                 </span>
             </td>

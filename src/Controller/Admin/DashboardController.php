@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Project; 
 use App\Entity\Taches;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -32,6 +33,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Tâches', 'fas fa-tasks', Taches::class);
         yield MenuItem::linkToCrud('Projets', 'fas fa-project-diagram', Project::class);
-
+        yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
     }
 }

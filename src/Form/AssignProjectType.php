@@ -16,7 +16,7 @@ class AssignProjectType extends AbstractType
         $builder
             ->add('assignedUser', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'lastname', // Change selon le champ que tu veux afficher (nom, prénom...)
+                'choice_label' => 'firstname', // Change selon le champ que tu veux afficher (nom, prénom...)
                 'placeholder' => 'Sélectionner un utilisateur',
                 'required' => false,
             ]);

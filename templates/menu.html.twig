@@ -12,6 +12,13 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link text-warning fw-bold" href="{{ path('adminadmin_dashboard') }}">
+                            <i class="fas fa-user-shield"></i> Admin
+                        </a>
+                    </li>
+                {% endif %}
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -44,7 +51,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-circle"></i> {{ app.user.username }}
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                             <li>
                                 <a class="dropdown-item" href="{{ path('app_user_index') }}">
                                     <i class="fas fa-user"></i> Mon Profil

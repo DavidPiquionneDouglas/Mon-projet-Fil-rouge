@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat Communautaire{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            background-color: #f8f9fa;
+            overflow: hidden;
+        }
+        .chat-messages {
+            height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #e9ecef;
+        }
+        .chat-message {
+            margin-bottom: 15px;
+        }
+        .chat-message .message-content {
+            padding: 10px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            max-width: 70%;
+        }
+        .chat-message.left .message-content {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+        }
+        .chat-message.right .message-content {
+            background-color: #0d6efd;
+            color: #fff;
+            border: 1px solid #0a58ca;
+        }
+        .chat-message .message-meta {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .chat-input {
+            padding: 15px;
+            background-color: #fff;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <h2 class="text-center mb-4">Chat Communautaire</h2>
+    <div class="chat-container shadow">
+        <div class="chat-messages" id="chat-messages">
+            {% for message in messages %}
+                <div class="chat-message {% if message.user.id == app.user.id %}right{% else %}left{% endif %}">
+                    <div class="message-content">
+                        {{ message.content }}
+                    </div>
+                    <div class="message-meta">
+                        <strong>{{ message.user.username }}</strong> &middot; {{ message.createdAt|date('H:i') }}
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-center text-muted">Aucun message pour le moment...</p>
+            {% endfor %}
+        </div>
+        <div class="chat-input">
+            {{ form_start(form) }}
+            <div class="input-group">
+                {{ form_widget(form.content) }}
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var chatMessages = document.getElementById("chat-messages");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+</script>
+{% endblock %}

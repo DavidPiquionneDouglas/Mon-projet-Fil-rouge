@@ -41,7 +41,6 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérification des mots de passe
             $password = $form->get('password')->getData();
             $confirmPassword = $form->get('confirmPassword')->getData();
     
@@ -50,7 +49,6 @@ final class UserController extends AbstractController
                 return $this->redirectToRoute('app_user_register');
             }
     
-            // Hashage du mot de passe
             $user->setPassword($passwordHasher->hashPassword($user, $password));
     
             // Upload de la photo
@@ -70,7 +68,6 @@ final class UserController extends AbstractController
                 }
             }
     
-            // Enregistrement en base de données
             $entityManager->persist($user);
             $entityManager->flush();
     

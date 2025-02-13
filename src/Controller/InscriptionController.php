@@ -1,5 +1,4 @@
 <?php
-// src/Controller/InscriptionController.php
 
 namespace App\Controller;
 
@@ -19,16 +18,12 @@ class InscriptionController extends AbstractController
      */
     public function inscription(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
-        // Créer un objet User
         $user = new User();
         
-        // Créer le formulaire d'inscription
         $form = $this->createForm(InscriptionType::class, $user);
         $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hashage du mot de passe
             $password = $user->getPassword();
             $encodedPassword = $passwordHasher->hashPassword($user, $form->get('password')->getData());
             $user->setPassword($encodedPassword);
@@ -47,18 +42,14 @@ class InscriptionController extends AbstractController
             }
 
 
-            // Enregistrer l'utilisateur en base de données
             $em->persist($user);
             $em->flush();
 
-            // Ajouter un message de succès
             $this->addFlash('success', 'Votre compte a été créé avec succès. Vous pouvez vous connecter.');
 
-            // Rediriger vers la page de connexion après inscription
             return $this->redirectToRoute('app_login');
         }
 
-        // Rendre la vue du formulaire
         return $this->render('newUser.html.twig', [
             'form' => $form->createView(),
         ]);

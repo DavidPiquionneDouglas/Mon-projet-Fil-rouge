@@ -1,86 +1,101 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/styles.css">
-    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
-</head>
-<body>
-    {# <header class="bg-dark text-white">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="index.html">
-                    <img src="images/logo.png" alt="Logo" style="height: 80px;">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="fonctionnalite.html">Fonctionnalités</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="connexion.html">Se connecter</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav> #}
-    </header>
+{% extends 'base.html.twig' %}
 
-    <main class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow-lg p-3 mb-5 bg-body rounded">
-                    <div class="card-body">
-                        <h1 class="card-title text-center mb-4">Inscription</h1>
-                        <form action="" method="post">
-                            <div class="mb-3">
-                                <label for="identifiant" class="form-label">Identifiant</label>
-                                <input type="text" class="form-control" id="identifiant" name="nom" pattern="[^\s]+" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="mdp" class="form-label">Mot de passe (8 car. min.)</label>
-                                <input type="password" class="form-control" id="mdp" name="mdp" minlength="8" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="mdp2" class="form-label">Confirmer le mot de passe</label>
-                                <input type="password" class="form-control" id="mdp2" name="mdp2" required>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary btn-lg">S'inscrire</button>
-                            </div>
-                        </form>
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<main class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-3 mb-5 bg-body rounded">
+                <div class="card-body">
+                    <h3 class="card-title text-center text-primary mb-4">Inscription</h3>
+
+                    {% if form.vars.errors|length > 0 %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form) }}
+                        </div>
+                    {% endif %}
+
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.email, 'Identifiant') }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control shadow-sm'}}) }}
+                        {{ form_errors(form.email) }}
                     </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.firstName, 'Prénom') }}
+                        {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.firstName) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.lastName, 'Nom') }}
+                        {{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.lastName) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.matricule, 'Matricule') }}
+                        {{ form_widget(form.matricule, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.matricule) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.telephone, 'Téléphone') }}
+                        {{ form_widget(form.telephone, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.telephone) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.birthday, 'Date de naissance') }}
+                        {{ form_widget(form.birthday, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.birthday) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.photo, 'Photo de profil') }}
+                        {{ form_widget(form.photo, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.photo) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.service, 'Service') }}
+                        {{ form_widget(form.service, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.service) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.speciality, 'Spécialité') }}
+                        {{ form_widget(form.speciality, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.speciality) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.password, 'Mot de passe (8 car. min.)') }}
+                        {{ form_widget(form.password, {'attr': {'class': 'form-control shadow-sm', 'minlength': 8}}) }}
+                        {{ form_errors(form.password) }}
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        {{ form_label(form.confirmPassword, 'Confirmer le mot de passe') }}
+                        {{ form_widget(form.confirmPassword, {'attr': {'class': 'form-control shadow-sm'}}) }}
+                        {{ form_errors(form.confirmPassword) }}
+                    </div>
+
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        {{ form_widget(form) }}
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm">S'inscrire</button>
+                    {{ form_end(form) }}
+                    {# <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm">S'inscrire</button>
+                    </div> #}
+
+                    {{ form_end(form) }}
                 </div>
             </div>
         </div>
-    </main>
-
-    <footer class="bg-dark text-white text-center py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h2><a href="politique_de_conf.html" class="text-white text-decoration-none">Politique de Confidentialité</a></h2>
-                </div>
-                <div class="col-md-6">
-                    <h2><a href="#" class="text-white text-decoration-none">Faq</a></h2>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <script src="../assets/js/inscription.js"></script>
-</body>
-</html>
+    </div>
+</main>
+{% endblock %}

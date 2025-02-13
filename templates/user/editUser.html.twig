@@ -8,10 +8,8 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                {# Ajout de l'action pour soumettre à la route edit #}
                 <form action="{{ path('app_user_edit', {'id': user.id}) }}" method="post" enctype="multipart/form-data" class="row g-3">
                     
-                    {# Ajout du token CSRF #}
                     {{ form_widget(form._token) }}
 
                     <div class="col-md-6">

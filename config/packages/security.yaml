@@ -32,7 +32,8 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/user, roles: ROLE_USER }
+        - { path: ^/user, roles: PUBLIC_ACCESS }
+        - { path: ^/user/register, roles: PUBLIC_ACCESS}
 
 when@test:
     security:
@@ -42,3 +43,7 @@ when@test:
                 cost: 4  # Bcrypt - valeur minimale
                 time_cost: 3  # Argon2 - valeur minimale
                 memory_cost: 10  # Argon2 - valeur minimale
+
+
+
+

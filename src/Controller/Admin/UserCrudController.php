@@ -28,7 +28,7 @@ class UserCrudController extends AbstractCrudController
             TextField::new('service')->setLabel('Service'),
             TextField::new('speciality')->setLabel('Spécialité'),
             ImageField::new('photo')
-                ->setBasePath('public/assets/image/user/')
+                ->setBasePath('/assets/image/user/')
                 ->setUploadDir('public/assets/image/user/')
                 ->setUploadedFileNamePattern('[randomhash].[extension]')
                 ->setRequired(false),

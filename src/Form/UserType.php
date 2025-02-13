@@ -36,19 +36,19 @@ class UserType extends AbstractType
                 'attr' => [
                 'placeholder' => 'Votre prénom'
                 ]
-            ])
-            ->add('lastName', TextType::class, [
-                'label' => 'Nom',
-                'attr' => [
-                'placeholder' => 'Votre nom'
-                ]
-            ])
-            ->add('birthday', DateType::class, [
-                'widget' => 'single_text',
-                'required' => false,
-                'empty_data' => null,
-                'label' => 'Date de naissance'
                 ])
+                ->add('lastName', TextType::class, [
+                    'label' => 'Nom',
+                    'attr' => [
+                    'placeholder' => 'Votre nom'
+                    ]
+                ])
+                ->add('birthday', DateType::class, [
+                    'widget' => 'single_text',
+                    'required' => false,
+                    'empty_data' => null,
+                    'label' => 'Date de naissance'
+                    ])
                 ->add('telephone', TelType::class, [
                     'label' => 'Téléphone',
                     'attr' => [
@@ -96,8 +96,11 @@ class UserType extends AbstractType
                             'placeholder' => 'confirmer votre mot de passe de génie'
                         ]
                     ]
-                ])
-        ;
+                    
+                        ]);
+
+                
+        
     }
 
     public function configureOptions(OptionsResolver $resolver): void
